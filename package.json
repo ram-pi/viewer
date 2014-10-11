@@ -1,0 +1,11 @@
+{
+  "name": "brain_viewer",
+  "version": "0.0.1",
+  "description": "brain_viewer version with hapi and angular",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "author": "pierpaolo",
+  "license": "SPINE"
+}
