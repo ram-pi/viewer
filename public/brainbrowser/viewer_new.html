@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="viewerModule">  
+  <head>  
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">  
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.10.custom.css" rel="Stylesheet" />
+    <link type="text/css" href="css/common.css" rel="Stylesheet" />
+    <link type="text/css" href="css/surface-viewer-demo.css" rel="Stylesheet" />
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <script src="core.js"></script>
+    <title>BrainBrowser Surface Viewer</title>  
+  </head>  
+  <body>
+    <div id="display" ng-controller="viewerController">
+        <div id="vertex-data-wrapper">
+            <div id="vertex-data">
+                <h2>Vertex info</h2>
+
+                <table id="niftiTable">
+                    <tr><th>Name</th><th>Miniature</th><th>Selection</th></tr>
+                    <tr ng-repeat="el in list">
+                        <td>{{el}}</td>
+                        <td><img ng-src="{{el}}.min.gif" height="45" width="45"></td>
+                        <td>
+                            <input type='checkbox' name='selectNii' id='selectNii' value="{{el}}" /> 
+                        </td>
+                    </tr>
+                </table>
+
+                <input type="hidden" id="index" ng-model="index" />
+                <pre>Index: <span ng-bind="index"></span> </pre>
+
+                <input type="hidden" id="region" ng-model="region" />
+                <pre>Region: <span ng-bind="region"></span> </pre>
+
+                <input type="hidden" id="coordinates" ng-model="coordinates" />
+                <pre>Coordinates: <span ng-bind="coordinates"></span> </pre>
+
+                <input type="hidden" id="color" ng-model="color" />
+                <pre>Color: <span ng-bind="color"></span> </pre>
+
+                <input type="hidden" id="andColors" ng-model="andColors" />
+                <pre>Colors required: <span ng-bind="andColors"></span> </pre>
+
+                <input type="hidden" id="orColors" ng-model="orColors" />
+                <pre>Colors optional: <span ng-bind="orColors"></span> </pre>
+
+                <button id="clear" ng-click="clearScope()">Clear</button>
+                <button id="and" ng-click="and()"> AND </button>
+                <button id="or" ng-click="or()"> OR </button>
+                <button id="structureSearch" ng-click="complexSearch()">Search</button>
+                </br>
+                
+            </div>
+        </div>
+        <div id="brainbrowser"></div>
+    </div>
+
+    <!-- all the scripts -->
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/jquery-ui-1.8.10.custom.min.js"></script>
+    <script src="js/three.r66.min.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/brainbrowser/brainbrowser.js"></script>
+    <script src="js/brainbrowser/core/tree-store.js"></script>
+    <script src="js/brainbrowser/lib/config.js"></script>
+    <script src="js/brainbrowser/lib/utils.js"></script>
+    <script src="js/brainbrowser/lib/events.js"></script> 
+    <script src="js/brainbrowser/lib/loader.js"></script>
+    <script src="js/brainbrowser/lib/color-map.js"></script> 
+    <script src="js/brainbrowser/surface-viewer.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/color.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/loading.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/rendering.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/views.js"></script>
+    <script src="surface-viewer-demo.config.js"></script> 
+  </body>  
+</html>  
