@@ -1,7 +1,11 @@
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
 html {
   height: 100%;
   overflow: scroll;
-  background-color: black;
+  background-color: white;
+  font-family: 'Lato';
+  font-weight: normal;
 }
 
 #display {
@@ -27,7 +31,7 @@ html {
 #vertex-data {
   background-color: gray;
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 14px;
   padding: 1em;
   border-radius: 10px;
@@ -36,5 +40,40 @@ html {
 #vertex-data h3 {
   font-size: 18px;
   margin-top: 0;
+}
+
+table#niftiTable {
+  border-spacing: 20px 0px;
+}
+
+th {
+  font-size: 16px;
+  padding-bottom: 15px;
+}
+
+button {
+  font-family: 'Lato';
+  -moz-border-radius:10px;
+  -webkit-border-radius:10px;
+  border-radius:10px;
+  border:1px solid;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-size:15px;
+  padding:6px 3px;
+}
+
+button:hover {
+  background-color:#5cbf2a;
+}
+
+button:active {
+  position:relative;
+  top:1px;
+}
+
+div#brainbrowser {
+  background-color: white;
 }
 
