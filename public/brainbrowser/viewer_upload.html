@@ -7,7 +7,7 @@
     <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.10.custom.css" rel="Stylesheet" />
     <link type="text/css" href="css/common.css" rel="Stylesheet" />
     <link type="text/css" href="css/surface-viewer-demo.css" rel="Stylesheet" />
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <script src="js/angular.min.js"></script><!-- load angular -->
     <script src="core.js"></script>
     <title>BrainBrowser Surface Viewer</title>  
   </head>  
@@ -17,16 +17,7 @@
             <div id="vertex-data">
                 <h2>Vertex info</h2>
 
-                <table id="niftiTable">
-                    <tr><th>Name</th><th>Miniature</th><th>Selection</th></tr>
-                    <tr ng-repeat="el in list">
-                        <td>{{el}}</td>
-                        <td><img ng-src="{{el}}.min.gif" height="45" width="45"></td>
-                        <td>
-                            <input type='checkbox' name='selectNii' id='selectNii' value="{{el}}" /> 
-                        </td>
-                    </tr>
-                </table>
+                <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
 
                 <input type="hidden" id="index" ng-model="index" />
                 <pre>Index: <span ng-bind="index"></span> </pre>
@@ -41,7 +32,7 @@
                 <pre>Color: <span ng-bind="color"></span> </pre>
 
                 <input type="hidden" id="andColors" ng-model="andColors" />
-                <pre>Required colors:: <span ng-bind="andColors"></span> </pre>
+                <pre>Required colors: <span ng-bind="andColors"></span> </pre>
 
                 <input type="hidden" id="orColors" ng-model="orColors" />
                 <pre>Optional colors: <span ng-bind="orColors"></span> </pre>
@@ -58,8 +49,7 @@
     </div>
 
     <!-- all the scripts -->
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/jquery-1.11.1.js"></script>
     <script src="js/jquery-ui-1.8.10.custom.min.js"></script>
     <script src="js/three.r66.min.js"></script>
     <script src="js/ui.js"></script>
