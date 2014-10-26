@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="viewerModule">  
+  <head>  
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">  
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.10.custom.css" rel="Stylesheet" />
+    <link type="text/css" href="css/common.css" rel="Stylesheet" />
+    <link type="text/css" href="css/surface-viewer-demo.css" rel="Stylesheet" />
+    <link type="text/css" href="css/bootstrap.css" rel="Stylesheet" />
+    <script src="js/jquery-1.11.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <script src="core_mod.js"></script>
+    <title>BrainBrowser Surface Viewer</title> 
+  </head>  
+  <body ng-controller="viewerController">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-default" role="navigation">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                            <span class="sr-only">Brain Viewer</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Brain Viewer</a>
+                    </div>
+                
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse navbar-ex1-collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="active" ><a href="simple">Simple Search</a></li>
+                            <li><a href="query">Query Builder</a></li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </nav>
+            </div>
+        </div> <!-- END ROW NAV -->
+        
+        <div class="row">
+            <div class="col-lg-3">
+            
+                <div class="panel panel-default">
+                      <div class="panel-heading">
+                            <h3 class="panel-title">Vertex Info</h3>
+                      </div>
+                      <div class="panel-body">
+                            <table id="niftiTable" class="table">
+                                <tr><th>Name</th><th>Miniature</th><th></th></tr>
+                                <tr ng-repeat="el in list">
+                                    <td>{{el}}</td>
+                                    <td><img ng-src="{{el}}.min.gif" height="45" width="45"></td>
+                                    <td>
+                                        <div class="checkbox">
+                                            <!-- <input type='checkbox' name='selectNii' id='selectNii' value="{{el}}" /> -->
+                                            <input type="radio" name="selectNii" id='selectNii' value="{{el}}">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <input type="hidden" id="index" ng-model="index" />
+                            <pre>Index: <span ng-bind="index"></span> </pre>
+
+                            <input type="hidden" id="region" ng-model="region" />
+                            <pre>Region: <span ng-bind="region"></span> </pre>
+
+                            <input type="hidden" id="coordinates" ng-model="coordinates" />
+                            <pre>Coordinates: <span ng-bind="coordinates"></span> </pre>
+
+                            <input type="hidden" id="color" ng-model="color" />
+                            <pre>Color: <span ng-bind="color"></span> </pre>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary" id="clear" ng-click="simpleSearch()">Search</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="col-lg-9 distanceCol">
+                <!-- 16:9 aspect ratio -->
+                <div class="embed-responsive embed-responsive-16by9">
+                    <div id="brainbrowser"></div> 
+                </div>
+                <div class="alert alert-info" role="alert"><h5>Basic Instruction </h5>
+                    <p>Hi user, you can navigate the brain and move it along the viewer using the right key of your mouse. You can also rotate using the left key and click on the it to select a vertex.
+                    Once you have selected some vertex you can build a query and run it. 
+                    Enjoy
+                    </p>
+                </div>
+            </div>
+        </div> <!-- END ROW BRAIN -->
+    </div>
+
+    <!-- all the scripts -->
+    <script src="js/jquery-ui-1.8.10.custom.min.js"></script>
+    <script src="js/three.r66.min.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/brainbrowser/brainbrowser.js"></script>
+    <script src="js/brainbrowser/core/tree-store.js"></script>
+    <script src="js/brainbrowser/lib/config.js"></script>
+    <script src="js/brainbrowser/lib/utils.js"></script>
+    <script src="js/brainbrowser/lib/events.js"></script> 
+    <script src="js/brainbrowser/lib/loader.js"></script>
+    <script src="js/brainbrowser/lib/color-map.js"></script> 
+    <script src="js/brainbrowser/surface-viewer.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/color.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/loading.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/rendering.js"></script>
+    <script src="js/brainbrowser/surface-viewer/modules/views.js"></script>
+    <script src="surface-viewer-demo.config.js"></script> 
+    <script src="surface-viewer-settings.js"></script> 
+
+  </body>  
+</html>  

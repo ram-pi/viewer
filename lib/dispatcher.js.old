@@ -4,6 +4,7 @@ var querystring = require('querystring');
 var _url = require("url");
 var labelsReader = require("./labelsReader.js");
 var creator = require("./imageCreator.js");
+var translator = require("./translator.js");
 
 
 /* Load local libs */
@@ -30,11 +31,28 @@ exports.dispatchGET = function(req, res) {
 		res.file(BBpath + "viewer_new.html");
 	}
 
+	else if (path == "/simple") {
+		console.log("SERVER: Loading new viewer...");
+		res.file(BBpath + "viewer_simple.html");
+	}
+
+	else if (path == "/query") {
+		console.log("SERVER: Loading new viewer...");
+		res.file(BBpath + "viewer_query.html");
+	}
+
 	// Load angular module
 	else if (path == "/core.js") {
 		console.log("SERVER: Loading core.js");
 		res.file("./lib/core.js");
 	}
+
+	// Load angular module
+	else if (path == "/core_mod.js") {
+		console.log("SERVER: Loading core.js");
+		res.file("./lib/core_mod.js");
+	}
+
 
 	// Find the list of nifti
 	else if (path == "/niftiList") {
@@ -97,7 +115,71 @@ exports.dispatchGET = function(req, res) {
 			var files = creator.createFromFilenameOnlyStructure(labels, filename, savingDir);
 
 		// Create HTML page for the result
-		this.createHTMLpage(files, savingDir, onlyStructure, res);
+		this.createHTMLpage(files, savingDir, onlyStructure, res, 12000);
+	}
+
+
+	else if (path.match("querySearch")) {
+		var query = req.url.query.query;
+		var filename = req.url.query.filename;
+		// Deleting spaces
+		query = query.replace(/\s+/g, '');
+		query = translator.translateQuery(query);
+		console.log("SERVER: querySearch on -> " + query + " and " + filename);
+
+		// Perform the search for the relative slices
+		var savingDir = creator.createGifFolder(query, filename);
+		var files = creator.createFromFilenameQuerySync(query, filename, savingDir);
+
+		// Create HTML page for the result
+		this.createHTMLpage(files, savingDir, 1, res, 1);
+
+	}
+
+	else if (path.match("complexSearch")) {
+		var andColors = req.url.query.andColors;
+		var orColors = req.url.query.orColors;
+		var filename = req.url.query.filename;
+		var onlyStructure = req.url.query.onlyStructure;
+		console.log("SERVER: complexSearch with input: " + andColors + " " + orColors + " " + filename + " " + onlyStructure);
+		var colorsSplitted = andColors.split(" ");
+		var andLabels;
+		for (var i in colorsSplitted) {
+			var color = colorsSplitted[i];
+			//console.log(color);
+			var label = labelsReader.finder(color);
+			if (i == 0) {
+				andLabels = label;
+			} else {
+				andLabels += label;
+			}
+			andLabels += "AND";
+		}
+		console.log("SERVER: labels in AND are " + andLabels);
+
+		colorsSplitted = orColors.split(" ");
+		var orLabels;
+
+		for (var i in colorsSplitted) {
+			var color = colorsSplitted[i];
+			//console.log(color);
+			var label = labelsReader.finder(color);
+			if (i == 0) {
+				orLabels = label;
+			} else {
+				orLabels = orLabels + "_" + label;
+			}
+		}
+		console.log("SERVER: labels in OR are " + orLabels);
+
+
+
+		// Perform the search for the relative slices
+		var savingDir = creator.createGifFolder(andLabels, filename);
+		var files = creator.createFromFilenameAndOr(andLabels, orLabels, filename, savingDir);
+
+		// Create HTML page for the result
+		this.createHTMLpage(files, savingDir, onlyStructure, res, 35000);
 	}
 
 	// Loading BB resources
@@ -106,7 +188,7 @@ exports.dispatchGET = function(req, res) {
 	}
 }
 
-exports.createHTMLpage = function(files, savingDir, onlyStructure, res) {
+exports.createHTMLpage = function(files, savingDir, onlyStructure, res, timeout) {
 	var content = "<html><head><title>Results Page</title></head><body>";
 
 		// TODO handle the asynchronous execution of jar before execute the things below
@@ -129,9 +211,9 @@ exports.createHTMLpage = function(files, savingDir, onlyStructure, res) {
 				} else 
 					console.log("Error -> " + err);
 			});	
-		}, 12000);
+		}, timeout);
 
 		setTimeout(function() {
 			creator.removeFolder(savingDir);
-		}, 60000);	
+		}, 120000);	
 }

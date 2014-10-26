@@ -1,79 +1,21 @@
 @import url(http://fonts.googleapis.com/css?family=Lato);
 
 html {
-  height: 100%;
   overflow: scroll;
   background-color: white;
   font-family: 'Lato';
   font-weight: normal;
+  background-color: #A0B4F2 !important;
 }
 
-#display {
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
-
-#brainbrowser {
-  height: 100%;
-  width: 100%;
-}
-
-#vertex-data-wrapper {
-  position: absolute;
-  left: 15px;
-  top: 145px;
-  padding: 5px;
-  background-color: white;
-  border-radius: 10px;
-}
-
-#vertex-data {
-  background-color: gray;
-  color: white;
-  font-weight: normal;
-  font-size: 14px;
-  padding: 1em;
-  border-radius: 10px;
-}
-
-#vertex-data h3 {
-  font-size: 18px;
-  margin-top: 0;
-}
-
-table#niftiTable {
-  border-spacing: 20px 0px;
-}
-
-th {
-  font-size: 16px;
-  padding-bottom: 15px;
-}
-
-button {
-  font-family: 'Lato';
-  -moz-border-radius:10px;
-  -webkit-border-radius:10px;
-  border-radius:10px;
-  border:1px solid;
-  display:inline-block;
-  cursor:pointer;
-  color:#ffffff;
-  font-size:15px;
-  padding:6px 3px;
-}
-
-button:hover {
-  background-color:#5cbf2a;
-}
-
-button:active {
-  position:relative;
-  top:1px;
+body {
+  background-color: #A0B4F2 !important;
+  padding-top: 20px !important;
 }
 
 div#brainbrowser {
   background-color: white;
+  width: 848px !important;
+  height: 480px !important;
 }
 
