@@ -10,7 +10,7 @@
     <link type="text/css" href="css/bootstrap.css" rel="Stylesheet" />
     <script src="js/jquery-1.11.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <script src="js/angular.min.js"></script><!-- load angular -->
     <script src="core_mod.js"></script>
     <title>BrainBrowser Surface Viewer</title> 
   </head>  
@@ -36,6 +36,7 @@
                         <ul class="nav navbar-nav">
                             <li><a href="simple">Simple Search</a></li>
                             <li  class="active"><a href="query">Query Builder</a></li>
+                            <li><a href="parenthesized">Parenthesized Query</a></li>
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </nav>
@@ -100,12 +101,12 @@
                     </p>
                 </div>
                 <div class="alert alert-success">
-                    <strong>Query(Regions): </strong> <span ng-bind="query"></span>
-                    
+                    <strong>Query(Structures): </strong> 
+                    <button type="button" class="btn btn-primary" style="margin-left:10px" ng-repeat="el in tagsRegions" ng-click="removeTag(el, $index)">{{el}}</button>
                 </div>
                 <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <strong>Query(Colors): </strong> <span ng-bind="queryColors"></span>
+                    <strong>Query(Colors): </strong> 
+                    <button type="button" class="btn btn-primary" style="margin-left:10px" ng-repeat="el in tags" ng-click="removeTag(el, $index)">{{el}}</button>
                 </div>
                 
             </div>
