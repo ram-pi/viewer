@@ -11,7 +11,7 @@
     <script src="js/jquery-1.11.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/angular.min.js"></script><!-- load angular -->
-    <script src="core_mod.js"></script>
+    <script src="core_parenthesized.js"></script>
     <title>BrainBrowser Surface Viewer</title> 
   </head>  
   <body ng-controller="viewerController">
@@ -84,7 +84,7 @@
                             </div>
                             <div class="btn-group" style="padding-top: 10px;">
                                 <button type="button" class="btn btn-primary" id="clear" ng-click="clearScope()">Clear</button>
-                                <button type="button" class="btn btn-primary" id="structureSearch" ng-click="querySearch()">Search</button>
+                                <button type="button" class="btn btn-primary" id="structureSearch" ng-click="simpleQuerySearch()">Search</button>
                             </div>
                         </div>
                 </div>

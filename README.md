@@ -1,5 +1,6 @@
 viewer
 ======
 Brain Viewer version with Hapi and Angular.
-Launching with node server.js or npm test.
-The working testing file is T3.nii.gz.
+For the first installation launch dbcreator.sh.
+After the first installation you can launch with node server.js.
+Remember to make the search on the T3.nii.gz file.
