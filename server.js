@@ -54,25 +54,17 @@ server.route({
 
 server.route({
 	method: 'GET',
+	path: '/multi',
+	handler: {
+		file: BBpath + "viewer_multi.html"
+	}
+});
+
+server.route({
+	method: 'GET',
 	path: '/core.js',
 	handler: {
 		file: "./lib/core.js"
-	}
-});
-
-server.route({
-	method: 'GET',
-	path: '/core_mod.js',
-	handler: {
-		file: "./lib/core_mod.js"
-	}
-});
-
-server.route({
-	method: 'GET',
-	path: '/core_parenthesized.js',
-	handler: {
-		file: "./lib/core_parenthesized.js"
 	}
 });
 
@@ -237,6 +229,33 @@ server.route({
 			// Perform the search for the relative slices
 			var savingDir = creator.createGifFolder(query2, filename);
 			creator.createFromFilenameQueryParenthesized(query, filename, savingDir,
+				function(files) {
+					// Create HTML page for the result
+					exports.createHTMLpage(files, savingDir, res);
+				});
+		}
+});
+
+server.route({
+	method: 'GET',
+	path: '/multiParameters',
+	handler: 
+		function(req, res) {
+			var query = req.url.query.query;
+			var filename = req.url.query.filename;
+			var fa = req.url.query.fa;
+			// Deleting spaces
+			query = query.replace(/\s+/g, '');
+			query = translator.translateQueryParenthesized(query);
+			console.log("SERVER: querySearch on -> " + query + " and " + filename + " and " + fa);
+
+
+			// unable to create folder with ()
+			var query2 = query.replace(/\(/g, "P");
+			var query2 = query2.replace(/\)/g, "P");
+			// Perform the search for the relative slices
+			var savingDir = creator.createGifFolder(query2, filename);
+			creator.createFromMultiParameters(query, filename, fa, savingDir,
 				function(files) {
 					// Create HTML page for the result
 					exports.createHTMLpage(files, savingDir, res);
