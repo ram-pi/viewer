@@ -3,10 +3,11 @@ package finders;
 import java.util.ArrayList;
 
 import finders.interfaces.FinderInterface;
-import stackScanner.QueryStackSeeker;
+import stackScanner.MultiParametersStackSeeker;
 import stackScanner.interfaces.Scanner;
 import transformation.To_AxialV2;
 import transformation.To_SagitalV2;
+import utils.ExtraParameters;
 import utils.ResearchParameters;
 import ij.IJ;
 import ij.ImagePlus;
@@ -15,15 +16,17 @@ import ij.nifti.Nifti_Reader;
 import ij.nifti.Nifti_Writer;
 import ij.process.ImageProcessor;
 
-public class QueryHandler implements FinderInterface {
+public class MultiParametersFinder implements FinderInterface {
 
 	private Nifti_Writer writer;
 	private Nifti_Reader reader;
 	private ImagePlus volume;
 	private ImagePlus segmentation;
+	private ImagePlus faVol, lrVol;
 	private String filename;
 	
 	private String formula;
+	private Double fa, lr;
 	public ArrayList<String> labels;
 	public ArrayList<String> tokens;
 	public ArrayList<Integer> allLabels;
@@ -31,7 +34,9 @@ public class QueryHandler implements FinderInterface {
 	public String savingFolder;
 	public ImagePlus result;
 
-	public QueryHandler(String formula) {
+	public MultiParametersFinder(String formula, String fa, String lr) {
+		this.fa = Double.parseDouble(fa);
+		this.lr = Double.parseDouble(lr);
 		this.formula = formula;
 		this.writer = new Nifti_Writer();
 		this.reader = new Nifti_Reader();
@@ -67,6 +72,11 @@ public class QueryHandler implements FinderInterface {
 		filename = volume_filename;
 		volume = reader.load(dir, volume_filename);
 		segmentation = reader.load(dir, aseg_filename);
+	}
+	
+	public void loadFaData(String dir, String fa_filename, String lr_filename) {
+		faVol = reader.load(dir, fa_filename);
+		lrVol = reader.load(dir, lr_filename);
 	}
 	
 	/* Setting the savingFolder */
@@ -122,17 +132,26 @@ public class QueryHandler implements FinderInterface {
 	public void performSearch() throws InterruptedException {
 		ImageStack coronal = volume.getStack();
 		ImageStack coronal_aseg = segmentation.getStack();
+		ImageStack coronal_fa = faVol.getStack();
+		ImageStack coronal_lr = lrVol.getStack();
 		ImageStack sagital = getSagitalView(volume).getStack();
 		ImageStack sagital_aseg = getSagitalView(segmentation).getStack();
+		ImageStack sagital_fa = getSagitalView(faVol).getStack();
+		ImageStack sagital_lr = getSagitalView(lrVol).getStack();
 		ImageStack axial = getAxialView(volume).getStack();
 		ImageStack axial_aseg = getAxialView(segmentation).getStack();
+		ImageStack axial_fa = getAxialView(faVol).getStack();
+		ImageStack axial_lr = getAxialView(lrVol).getStack();
 		
 		ResearchParameters rpCoronal = new ResearchParameters(formula, coronal, coronal_aseg, tokens, allLabels);
+		ExtraParameters exCoronal = new ExtraParameters(fa, coronal_fa, lr, coronal_lr);
 		ResearchParameters rpSagital = new ResearchParameters(formula, sagital, sagital_aseg, tokens, allLabels);
+		ExtraParameters exSagital = new ExtraParameters(fa, sagital_fa, lr, sagital_lr);
 		ResearchParameters rpAxial = new ResearchParameters(formula, axial, axial_aseg, tokens, allLabels);
-		QueryStackSeeker seekerCoronal = new QueryStackSeeker(filename, "coronal", rpCoronal);
-		QueryStackSeeker seekerSagital = new QueryStackSeeker(filename, "sagital", rpSagital);
-		QueryStackSeeker seekerAxial = new QueryStackSeeker(filename, "axial", rpAxial);
+		ExtraParameters exAxial = new ExtraParameters(fa, axial_fa, lr, axial_lr);
+		MultiParametersStackSeeker seekerCoronal = new MultiParametersStackSeeker(filename, "coronal", rpCoronal, exCoronal);
+		MultiParametersStackSeeker seekerSagital = new MultiParametersStackSeeker(filename, "sagital", rpSagital, exSagital);
+		MultiParametersStackSeeker seekerAxial = new MultiParametersStackSeeker(filename, "axial", rpAxial, exAxial);
 		seekerCoronal.start();
 		seekerSagital.start();
 		seekerAxial.start();
@@ -146,11 +165,13 @@ public class QueryHandler implements FinderInterface {
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
-		QueryHandler qh = new QueryHandler(args[0]);
-		qh.getInfoFromFormula();
-		qh.loadFiles(args[1], args[3], args[2]);
-		qh.settingSavingFolder(args[4]);
-		qh.performSearch();
+		System.out.println("MultiParameters...");
+		MultiParametersFinder mpf = new MultiParametersFinder(args[0], args[1], args[2]);
+		mpf.getInfoFromFormula();
+		mpf.settingSavingFolder(args[3]);
+		mpf.loadFiles(args[4], args[5], args[6]);
+		mpf.loadFaData(args[4], args[7], args[8]);
+		mpf.performSearch();
 	}
 	
 }

@@ -2,6 +2,7 @@ package testing;
 
 import org.junit.Test;
 
+import finders.MultiParametersFinder;
 import finders.QueryHandler;
 import finders.SimpleQueryHandler;
 import finders.SingleStructureFinder;
@@ -36,6 +37,18 @@ public class BasicTest {
 		qh.settingSavingFolder("/Users/pierpaolo/Desktop/tmp/gif/");
 		qh.loadFiles("/Users/pierpaolo/git/viewer/images/", "T3.nii.gz", "Segmentation/T3.nii.gz");
 		qh.performSearch();
+	}
+	
+	@Test
+	public void multiParametersTest() throws InterruptedException {
+		System.out.println("MultiParameters...");
+		String formula = "1025_1126_2025_2126_3126_4126_11129_12129_13129_14129OR1109_2109_3109_4109_11115_12115_13115_14115OR1018_1118_2018_2118_3118_4118_11122_12122_13122_14122";
+		MultiParametersFinder mpf = new MultiParametersFinder(formula, "0.3", "0.6");
+		mpf.getInfoFromFormula();
+		mpf.settingSavingFolder("/Users/pierpaolo/Desktop/tmp/gif/");
+		mpf.loadFiles("/Users/pierpaolo/git/viewer/images", "IIT3mean_t1.nii", "Segmentation/IIT3mean_t1.nii");
+		mpf.loadFaData("/Users/pierpaolo/git/viewer/images", "FA/IIT3mean_t1.nii", "LR/IIT3mean_t1.nii");
+		mpf.performSearch();
 	}
 	
 }

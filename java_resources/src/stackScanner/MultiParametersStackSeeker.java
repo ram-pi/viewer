@@ -8,23 +8,26 @@ import java.util.Set;
 
 import database.Connection;
 import stackScanner.interfaces.Scanner;
+import utils.ExtraParameters;
 import utils.FormulaSolver;
 import utils.ResearchParameters;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
 
-public class QueryStackSeeker extends Thread implements Scanner{
+public class MultiParametersStackSeeker extends Thread implements Scanner{
 	
 	private Thread runner;
 	private String name;
 	private ImageStack result;
 	private FormulaSolver fs;
 	private ResearchParameters rp;
+	private ExtraParameters ep;
 	private Connection conn;
 	private String filename;
 	
-	public QueryStackSeeker(String filename, String name, ResearchParameters rp) {
+	public MultiParametersStackSeeker(String filename, String name, ResearchParameters rp, ExtraParameters ep) {
 		this.filename = filename;
+		this.ep = ep;
 		this.name = name;
 		this.rp = rp;
 		this.fs = new FormulaSolver();
@@ -43,7 +46,9 @@ public class QueryStackSeeker extends Thread implements Scanner{
 			ImageProcessor ip = rp.getSegmentationStack().getProcessor(i);
 			if (formulaSatisfiedWithDB(ip, i)) {
 				ImageProcessor sliceInVolume = rp.getVolumeStack().getProcessor(i);
-				ImageProcessor cleanSlice = sliceCleaner(sliceInVolume, ip);
+				ImageProcessor sliceFa = ep.getFaStack().getProcessor(i);
+				ImageProcessor sliceLr = ep.getLrStack().getProcessor(i);
+				ImageProcessor cleanSlice = sliceCleanerAndExtra(sliceInVolume, ip, sliceFa, sliceLr);
 				result.addSlice(cleanSlice);
 				counter++;
 			}
@@ -58,6 +63,25 @@ public class QueryStackSeeker extends Thread implements Scanner{
 				boolean goodPixel = false;
 				for (Integer l : rp.getAllLabels()) {
 					if (segmentationSlice.getPixelValue(i, j) == l) {
+						goodPixel = true;
+						break;
+					}
+				}
+				if (!goodPixel)
+					volumeSlice.putPixelValue(i, j, 0);
+			}
+		}
+
+		return volumeSlice;
+	}
+	
+	public ImageProcessor sliceCleanerAndExtra(ImageProcessor volumeSlice, ImageProcessor segmentationSlice, ImageProcessor faSlice, ImageProcessor lrSlice) {
+		for (int i = 0; i < segmentationSlice.getWidth(); i++) {
+			for (int j = 0; j < segmentationSlice.getHeight(); j++) {
+				boolean goodPixel = false;
+				for (Integer l : rp.getAllLabels()) {
+					if (segmentationSlice.getPixelValue(i, j) == l && faSlice.getPixelValue(i, j) >= ep.getFa() &&
+							lrSlice.getPixelValue(i, j) >= ep.getLr()) {
 						goodPixel = true;
 						break;
 					}
