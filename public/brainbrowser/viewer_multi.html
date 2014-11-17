@@ -99,6 +99,17 @@
                                     </script>
                             </div>
 
+                            <div id="slider" style="padding-top: 10px;">
+                                  <label for=fader>LR Value</label>
+                                    <input type=range min=-2 max=3.2 value=1 id="fader" step=0.1 onchange="outputUpdateLR(value)">
+                                    <output for=fader id="lr">1</output>
+                                    <script>
+                                    function outputUpdateLR(vol) {
+                                        document.querySelector('#lr').value = vol;
+                                    }
+                                    </script>
+                            </div>
+
                              <div class="btn-group" style="padding-top: 10px;">
                                 <button type="button" class="btn btn-primary" id="clear" ng-click="clearScope()">Clear</button>
                                 <button type="button" class="btn btn-primary" id="multiSearch" ng-click="multiSearch()">Search</button>

@@ -62,6 +62,14 @@ server.route({
 
 server.route({
 	method: 'GET',
+	path: '/upload',
+	handler: {
+		file: BBpath + "upload.html"
+	}
+});
+
+server.route({
+	method: 'GET',
 	path: '/core.js',
 	handler: {
 		file: "./lib/core.js"
@@ -119,6 +127,18 @@ server.route({
 
 server.route({
 	method: 'GET',
+	path: '/{name}.nii.min.gif',
+	handler: {
+		file: function(req) {
+			console.log(req.url.pathname + " -> " + "./images/Miniature/" + req.url.pathname);
+			return './images/Miniature/' + req.url.pathname;
+		}
+	}
+});
+
+
+server.route({
+	method: 'GET',
 	path: '/models/surfaces/ASCII_surfaces/{surfacename}',
 	handler: {
 		file: function(req) {
@@ -138,6 +158,15 @@ server.route({
 			return req.url.pathname;
 		}
 	}
+});
+
+server.route({
+	method: 'GET',
+	path: '/uploadFile',
+	handler: 
+		function(req, res) {
+			//TODO
+		}
 });
 
 server.route({
@@ -244,10 +273,11 @@ server.route({
 			var query = req.url.query.query;
 			var filename = req.url.query.filename;
 			var fa = req.url.query.fa;
+			var lr = req.url.query.lr;
 			// Deleting spaces
 			query = query.replace(/\s+/g, '');
 			query = translator.translateQueryParenthesized(query);
-			console.log("SERVER: querySearch on -> " + query + " and " + filename + " and " + fa);
+			console.log("SERVER: querySearch on -> " + query + " and " + filename + " and " + fa + " and " + lr);
 
 
 			// unable to create folder with ()
@@ -255,7 +285,7 @@ server.route({
 			var query2 = query2.replace(/\)/g, "P");
 			// Perform the search for the relative slices
 			var savingDir = creator.createGifFolder(query2, filename);
-			creator.createFromMultiParameters(query, filename, fa, savingDir,
+			creator.createFromMultiParameters(query, filename, fa, lr, savingDir,
 				function(files) {
 					// Create HTML page for the result
 					exports.createHTMLpage(files, savingDir, res);
