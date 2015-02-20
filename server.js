@@ -15,7 +15,7 @@ var __parentDir = path.dirname(process.mainModule.filename);
 var gifDir = __parentDir + "/gif/";
 
 // Create Server
-var server = new Hapi.Server('localhost', 8080);
+var server = new Hapi.Server('0.0.0.0', 8080);
 
 var BBpath = "public/brainbrowser/";
 
@@ -73,6 +73,38 @@ server.route({
 	path: '/core.js',
 	handler: {
 		file: "./lib/core.js"
+	}
+});
+
+server.route({
+	method: 'GET',
+	path: '/upload.js',
+	handler: {
+		file: "./lib/upload.js"
+	}
+});
+
+server.route({
+	method: 'POST',
+	path: '/fileUpload',
+	config: {
+		payload: {
+			maxBytes: 209715200,
+			output: 'stream',
+			parse: true
+		}
+	},
+	handler: function(req, res) {
+		console.log("SERVER: fileUpload request");
+	
+		req.payload["file"].pipe(fs.createWriteStream("./images/" + req.payload.name));
+		// The segmentation file should have the same name of the volume
+		req.payload["file2"].pipe(fs.createWriteStream("./images/Segmentation/" + req.payload.name));
+
+		creator.loadIntoDB(req.payload.name);
+
+		console.log("SERVER: files are saved");
+		res("done");
 	}
 });
 
@@ -158,15 +190,6 @@ server.route({
 			return req.url.pathname;
 		}
 	}
-});
-
-server.route({
-	method: 'GET',
-	path: '/uploadFile',
-	handler: 
-		function(req, res) {
-			//TODO
-		}
 });
 
 server.route({
@@ -295,6 +318,7 @@ server.route({
 
 server.start(function() {
 	console.log("Server running at", server.info.uri);
+	console.log("Remember to launch mysql to use all the features!!!");
 });
 
 
